@@ -64,6 +64,11 @@ GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::GifDecoder(void) {
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc>
+GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::~GifDecoder(void) {
+  if(useMalloc) free(gif);
+}
+
+template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc>
 void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::setStartDrawingCallback(
     callback f) {
   startDrawingCallback = f;
@@ -273,7 +278,7 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::startDecoding(
   if((!screenClearCallback || !updateScreenCallback || !drawPixelCallback) ||
     (usingFileCallbacks && (!fileSeekCallback || !filePositionCallback ||
       !fileReadCallback || !fileReadBlockCallback || !fileSizeCallback))) {
-    Serial.println("Error: missing a callback function");
+    //Serial.println("Error: missing a callback function");
     return ERROR_MISSING_CALLBACK_FUNCTION;
   }
 
@@ -288,7 +293,7 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::startDecoding(
   // file is already open, and we don't know the name, send a 0-length string instead
   if (gif->open("", GIFOpenFile, GIFCloseFile, GIFReadFile, GIFSeekFile, GIFDraw))
   {
-    Serial.printf("Successfully opened GIF; Canvas size = %d x %d\n", gif->getCanvasWidth(), gif->getCanvasHeight());
+    //Serial.printf("Successfully opened GIF; Canvas size = %d x %d\n", gif->getCanvasWidth(), gif->getCanvasHeight());
 #if 0
     GIFINFO gi;
     if (gif->getInfo(&gi)) {
@@ -298,10 +303,10 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::startDecoding(
       Serial.printf("min delay: %d ms\n", gi.iMinDelay);
     }
 #endif
-    Serial.flush();
+    //Serial.flush();
   } else {
-    Serial.print("open failed: ");
-    Serial.println(gif->getLastError());
+    //Serial.print("open failed: ");
+    //Serial.println(gif->getLastError());
     return translateGifErrorCode(gif->getLastError());    
   }
 
@@ -325,7 +330,7 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::startDecoding(
 
   // check for callbacks working first
   if(!screenClearCallback || !updateScreenCallback || !drawPixelCallback) {
-    Serial.println("Error: missing a callback function");
+    //Serial.println("Error: missing a callback function");
     return ERROR_MISSING_CALLBACK_FUNCTION;
   }
 
@@ -340,7 +345,7 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::startDecoding(
   // file is already open, and we don't know the name, send a 0-length string instead
   if (gif->open(gifPData, gifIDataSize, GIFDraw))
   {
-    Serial.printf("Successfully opened GIF; Canvas size = %d x %d\n", gif->getCanvasWidth(), gif->getCanvasHeight());
+    //Serial.printf("Successfully opened GIF; Canvas size = %d x %d\n", gif->getCanvasWidth(), gif->getCanvasHeight());
 #if 0
     GIFINFO gi;
     if (gif->getInfo(&gi)) {
@@ -350,10 +355,10 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::startDecoding(
       Serial.printf("min delay: %d ms\n", gi.iMinDelay);
     }
 #endif
-    Serial.flush();
+    //Serial.flush();
   } else {
-    Serial.print("open failed: ");
-    Serial.println(gif->getLastError());
+    //Serial.print("open failed: ");
+    //Serial.println(gif->getLastError());
     return translateGifErrorCode(gif->getLastError());    
   }
 
@@ -395,15 +400,15 @@ int GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::decodeFrame(bo
   if((!screenClearCallback || !updateScreenCallback || !drawPixelCallback) ||
     (usingFileCallbacks && (!fileSeekCallback || !filePositionCallback ||
       !fileReadCallback || !fileReadBlockCallback || !fileSizeCallback))) {
-    Serial.println("Error: missing a callback function");
+    //Serial.println("Error: missing a callback function");
     return ERROR_MISSING_CALLBACK_FUNCTION;
   }
 
   frameStatus = gif->playFrame(delayAfterDecode, &frameDelay_ms);
 
   if(frameStatus < 0) {
-    Serial.print("playFrame failed: ");
-    Serial.println(gif->getLastError());
+    //Serial.print("playFrame failed: ");
+    //Serial.println(gif->getLastError());
 
     return translateGifErrorCode(gif->getLastError());    
   }

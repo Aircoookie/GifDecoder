@@ -45,6 +45,7 @@ typedef struct rgb_24 {
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc=false> class GifDecoder {
 public:
   GifDecoder(void);
+  ~GifDecoder(void);
   int startDecoding(void);
   int startDecoding(uint8_t *pData, int iDataSize);
   int decodeFrame(bool delayAfterDecode = true);
