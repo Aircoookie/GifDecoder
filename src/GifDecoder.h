@@ -46,6 +46,8 @@ template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc=fals
 public:
   GifDecoder(void);
   ~GifDecoder(void);
+  void alloc(void);
+  void dealloc(void);
   int startDecoding(void);
   int startDecoding(uint8_t *pData, int iDataSize);
   int decodeFrame(bool delayAfterDecode = true);

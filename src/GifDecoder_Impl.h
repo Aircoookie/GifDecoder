@@ -57,15 +57,25 @@ file_size_callback GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>:
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc>
 GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::GifDecoder(void) {
-  if(!useMalloc)
-    gif = (AnimatedGIF*)buffer;
-  else
-    gif = (AnimatedGIF*)malloc(sizeof(AnimatedGIF));
+  
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc>
 GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::~GifDecoder(void) {
-  if(useMalloc) free(gif);
+  dealloc();
+}
+
+template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc>
+void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::dealloc(void) {
+  if (gif) delete gif;
+  gif = nullptr;
+}
+
+template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc>
+void GifDecoder<maxGifWidth, maxGifHeight, lzwMaxBits, useMalloc>::alloc(void) {
+  if (gif) dealloc();
+  gif = new AnimatedGIF();
+  beginCalled = false;
 }
 
 template <int maxGifWidth, int maxGifHeight, int lzwMaxBits, bool useMalloc>
